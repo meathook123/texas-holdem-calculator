@@ -7,9 +7,12 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class CalculatorService {
   players = [];
   updateSubject = new BehaviorSubject([]);
+  updateResultSubject = new BehaviorSubject([]);
   gameOn = false;
+  resultOn = false;
   chipSize: number;
   buyinCost: number;
+  results = [];
 
   constructor() {
     this.loadStorage();
@@ -19,10 +22,15 @@ export class CalculatorService {
     return this.updateSubject.asObservable();
   }
 
+  getUpdateResultEvent() {
+    return this.updateResultSubject.asObservable();
+  }
+
   startNewGame(size: number, cost: number) {
     this.gameOn = true;
     this.chipSize = size;
     this.buyinCost = cost;
+    localStorage['gameOn'] = true;
     localStorage['size'] = JSON.stringify(this.chipSize);
     localStorage['cost'] = JSON.stringify(this.buyinCost);
   }
@@ -48,31 +56,68 @@ export class CalculatorService {
     this.saveToStorage();
   }
 
+  checkOut(playerName, finalChips) {
+    const player = _.find(this.players, (p: any) => {
+      return p.name === playerName;
+    });
+    if (player) {
+      this.players = _.filter(this.players, (p: any) => {
+        return p.name !== player.name;
+      });
+      const score = Math.round((finalChips - player.chips) / this.chipSize * this.buyinCost * 100) / 100;
+      this.results.push({
+        name: player.name,
+        score: score
+      });
+      this.updateSubject.next(this.players);
+      this.updateResultSubject.next(this.results);
+      this.saveToStorage();
+    }
+  }
+
   endGame() {
     this.gameOn = false;
-    this.clearStorage();
+    this.resultOn = true;
+    this.players = [];
+    localStorage['players'] = '';
+    localStorage['gameOn'] = '';
+    localStorage['resultOn'] = true;
   }
 
   saveToStorage() {
     localStorage['players'] = JSON.stringify(this.players);
+    localStorage['results'] = JSON.stringify(this.results);
   }
 
   loadStorage() {
     this.chipSize = localStorage['size'] ? localStorage['size'] : undefined;
     this.buyinCost = localStorage['cost'] ? localStorage['cost'] : undefined;
-    if (this.chipSize && this.buyinCost) {
-      this.gameOn = true;
-    }
+    this.gameOn = localStorage['gameOn'] ? true : false;
+    this.resultOn = localStorage['resultOn'] ? true : false;
+
     const players = localStorage['players'] ? localStorage['players'] : undefined;
     if (players) {
+      // this.gameOn = true;
       this.players = JSON.parse(players);
       this.updateSubject.next(this.players);
     }
+
+    const results = localStorage['results'] ? localStorage['results'] : undefined;
+    if (results) {
+      // this.resultOn = true;
+      this.results = JSON.parse(results);
+      this.updateResultSubject.next(this.results);
+    }
   }
 
-  clearStorage() {
-    localStorage['players'] = '';
+  clearResult() {
+    this.resultOn = false;
+    this.results = [];
+    this.chipSize = undefined;
+    this.buyinCost = undefined;
+    localStorage['results'] = '';
     localStorage['size'] = '';
     localStorage['cost'] = '';
+    localStorage['resultOn'] = '';
   }
 }

@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Check Out</h1>
+<mat-dialog-content>
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="" [(ngModel)]="playerName">
+        <mat-option *ngFor="let player of game.players" [value]="player.name">{{ player.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" placeholder="Final Chips" [(ngModel)]="finalChips">
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="justify-end">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="!playerName || !finalChips" (click)="submit()">OK</button>
+</mat-dialog-actions>

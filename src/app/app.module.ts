@@ -3,7 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { MatTableModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatInput, MatDialogModule, MatSelectModule } from '@angular/material';
+import { MatTableModule,
+  MatButtonModule, MatFormFieldModule, MatInputModule, MatInput, MatDialogModule,
+  MatSelectModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './_components/header/header.component';
@@ -12,6 +14,7 @@ import { BoardComponent } from './_components/board/board.component';
 
 import { AddPlayerDialogComponent } from './_components/add-player-dialog/add-player-dialog.component';
 import { BuyInDialogComponent } from './_components/buy-in-dialog/buy-in-dialog.component';
+import { CheckoutDialogComponent } from './_components/checkout-dialog/checkout-dialog.component';
 
 import { CalculatorService } from './_services/calculator.service';
 
@@ -22,7 +25,8 @@ import { CalculatorService } from './_services/calculator.service';
     FooterComponent,
     BoardComponent,
     AddPlayerDialogComponent,
-    BuyInDialogComponent
+    BuyInDialogComponent,
+    CheckoutDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,8 @@ import { CalculatorService } from './_services/calculator.service';
   ],
   entryComponents: [
     AddPlayerDialogComponent,
-    BuyInDialogComponent
+    BuyInDialogComponent,
+    CheckoutDialogComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,5 @@
 <div class="game-board">
-  <div *ngIf="!game.gameOn">
+  <div *ngIf="!game.gameOn && !game.resultOn">
     <div class="start-panel">
       <div>
         <mat-form-field>
@@ -19,12 +19,14 @@
   <div *ngIf="game.gameOn">
     <div>
       <p>Chip Size: {{ game.chipSize }}</p>
-      <p>Buy In Cost: {{ game.buyinCost }}</p>
+      <p>Buy In Cost: ${{ game.buyinCost }}</p>
+      <p>Players checked out: {{ game.results.length }}</p>
     </div>
     <div>
       <button mat-raised-button color="primary" (click)="addPlayer()">Add Player</button>
       <button mat-raised-button color="primary" (click)="buyIn()">Buy In</button>
-      <button mat-raised-button color="warn" (click)="game.endGame()">End Game</button>
+      <button mat-raised-button (click)="checkOut()">Check Out</button>
+      <button mat-raised-button color="warn" (click)="game.endGame()" [disabled]="game.players.length > 0">End Game</button>
     </div>
     <mat-table #table [dataSource]="dataSource">
       <ng-container matColumnDef="name">
@@ -39,6 +41,30 @@
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+
+  <div *ngIf="!game.gameOn && game.resultOn">
+    <div>
+      <p>Chip Size: {{ game.chipSize }}</p>
+      <p>Buy In Cost: ${{ game.buyinCost }}</p>
+    </div>
+    <div>
+      <button mat-raised-button color="warn" (click)="game.clearResult()">Clear Result</button>
+    </div>
+    <mat-table #table [dataSource]="resultSource">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="score">
+        <mat-header-cell *matHeaderCellDef> Score </mat-header-cell>
+        <mat-cell *matCellDef="let element">$ {{ element.score > 0 ? '+' : ''}}{{element.score}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedResultColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedResultColumns;"></mat-row>
     </mat-table>
   </div>
 </div>

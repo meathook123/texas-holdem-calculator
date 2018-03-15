@@ -3,12 +3,13 @@ import { MatDialog} from '@angular/material';
 import { CalculatorService } from '../../_services/calculator.service';
 
 @Component({
-  selector: 'app-dialog-add-player',
-  templateUrl: './add-player-dialog.component.html',
-  styleUrls: ['./add-player-dialog.component.scss']
+  selector: 'app-dialog-checkout',
+  templateUrl: './checkout-dialog.component.html',
+  styleUrls: ['./checkout-dialog.component.scss']
 })
-export class AddPlayerDialogComponent implements OnInit {
+export class CheckoutDialogComponent implements OnInit {
   playerName: string;
+  finalChips: number;
   constructor(private dialog: MatDialog, private game: CalculatorService) { }
 
   ngOnInit() {
@@ -16,7 +17,7 @@ export class AddPlayerDialogComponent implements OnInit {
 
   submit() {
     if (this.playerName) {
-      this.game.addPlayer(this.playerName);
+      this.game.checkOut(this.playerName, this.finalChips);
     }
     this.dialog.closeAll();
   }
