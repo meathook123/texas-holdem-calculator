@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Add Player</h1>
+<mat-dialog-content>
+  <div>
+    <mat-form-field>
+      <input matInput placeholder="Player Name" [(ngModel)]="playerName">
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="justify-end">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="!playerName" (click)="submit()">OK</button>
+</mat-dialog-actions>
